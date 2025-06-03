@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.tymr.R
 import com.example.tymr.domain.model.Subject
+import com.example.tymr.domain.model.Task
 import com.example.tymr.presentation.components.CountCard
 import com.example.tymr.presentation.components.SubjectCard
 import com.example.tymr.presentation.components.tasksList
@@ -40,13 +41,66 @@ import com.example.tymr.presentation.components.tasksList
 @Composable
 fun DashboardScreen() {
     val subjects = listOf(
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0]),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[2]),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0]),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0]),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0]),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0]),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0])
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[2], subjectId = 0),
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
+        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0)
+    )
+
+    val tasks = listOf(
+        Task(
+            title = "Prepare",
+            description = "",
+            dueDate = 2L,
+            priority = 0,
+            relatedToSubject = "",
+            isComplete = false,
+            taskSubjectId = 0,
+            taskId = 1
+        ),
+        Task(
+            title = "Prepare",
+            description = "",
+            dueDate = 2L,
+            priority = 1,
+            relatedToSubject = "",
+            isComplete = false,
+            taskSubjectId = 0,
+            taskId = 1
+        ),
+        Task(
+            title = "Prepare",
+            description = "",
+            dueDate = 2L,
+            priority = 2,
+            relatedToSubject = "",
+            isComplete = false,
+            taskSubjectId = 0,
+            taskId = 1
+        ),
+        Task(
+            title = "Prepare",
+            description = "",
+            dueDate = 2L,
+            priority = 0,
+            relatedToSubject = "",
+            isComplete = false,
+            taskSubjectId = 0,
+            taskId = 1
+        ),
+        Task(
+            title = "Prepare",
+            description = "",
+            dueDate = 2L,
+            priority = 1,
+            relatedToSubject = "",
+            isComplete = false,
+            taskSubjectId = 0,
+            taskId = 1
+        )
     )
     Scaffold (
         topBar = { DashboardScreenTopBar() }
@@ -86,7 +140,9 @@ fun DashboardScreen() {
             tasksList(
                 sectionTitle = "UPCOMING TASKS",
                 emptyListText = "You don't have any tasks.\n Click the + button to add new task.",
-                tasks = emptyList()
+                tasks = tasks,
+                onCheckBoxClick = {},
+                onTaskCardClick = {}
             )
         }
 

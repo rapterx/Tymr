@@ -3,8 +3,10 @@ package com.example.tymr.domain.model
 data class Task(
     val title: String,
     val description: String,
-    val dueDate: String,
-    val priority: String,
+    val dueDate: Long,
+    val priority: Int,
     val relatedToSubject: String,
-    val isComplete: String
+    val isComplete: Boolean,
+    val taskSubjectId: Int,
+    val taskId: Int
 )
