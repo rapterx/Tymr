@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,10 +33,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.tymr.R
+import com.example.tymr.domain.model.Session
 import com.example.tymr.domain.model.Subject
 import com.example.tymr.domain.model.Task
 import com.example.tymr.presentation.components.CountCard
 import com.example.tymr.presentation.components.SubjectCard
+import com.example.tymr.presentation.components.studySessionsList
 import com.example.tymr.presentation.components.tasksList
 
 @Composable
@@ -67,7 +70,7 @@ fun DashboardScreen() {
             dueDate = 2L,
             priority = 1,
             relatedToSubject = "",
-            isComplete = false,
+            isComplete = true,
             taskSubjectId = 0,
             taskId = 1
         ),
@@ -77,7 +80,7 @@ fun DashboardScreen() {
             dueDate = 2L,
             priority = 2,
             relatedToSubject = "",
-            isComplete = false,
+            isComplete = true,
             taskSubjectId = 0,
             taskId = 1
         ),
@@ -101,6 +104,45 @@ fun DashboardScreen() {
             taskSubjectId = 0,
             taskId = 1
         )
+    )
+
+    val sessions = listOf(
+        Session(
+            relatedToSubject = "English",
+            date = 0L,
+            duration = 2L,
+            sessionSubjectId = 0,
+            sessionId = 0
+        ),
+        Session(
+            relatedToSubject = "English",
+            date = 0L,
+            duration = 2L,
+            sessionSubjectId = 0,
+            sessionId = 0
+        ),
+        Session(
+            relatedToSubject = "English",
+            date = 0L,
+            duration = 2L,
+            sessionSubjectId = 0,
+            sessionId = 0
+        ),
+        Session(
+            relatedToSubject = "English",
+            date = 0L,
+            duration = 2L,
+            sessionSubjectId = 0,
+            sessionId = 0
+        ),
+        Session(
+            relatedToSubject = "English",
+            date = 0L,
+            duration = 2L,
+            sessionSubjectId = 0,
+            sessionId = 0
+        )
+
     )
     Scaffold (
         topBar = { DashboardScreenTopBar() }
@@ -143,6 +185,18 @@ fun DashboardScreen() {
                 tasks = tasks,
                 onCheckBoxClick = {},
                 onTaskCardClick = {}
+            )
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+
+            studySessionsList(
+                sectionTitle = "RECENT STUDY SESSIONS",
+                emptyListText = "You don't have any recent study sessions.\n" +
+                        "Start a study session to begin recording you progress,",
+                sessions = sessions,
+                onDeleteIconClick = {}
             )
         }
 
