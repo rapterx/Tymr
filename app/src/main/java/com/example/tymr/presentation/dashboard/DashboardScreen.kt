@@ -26,6 +26,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,113 +41,44 @@ import com.example.tymr.R
 import com.example.tymr.domain.model.Session
 import com.example.tymr.domain.model.Subject
 import com.example.tymr.domain.model.Task
+import com.example.tymr.presentation.components.AddSubjectDialog
 import com.example.tymr.presentation.components.CountCard
+import com.example.tymr.presentation.components.DeleteDialog
 import com.example.tymr.presentation.components.SubjectCard
 import com.example.tymr.presentation.components.studySessionsList
 import com.example.tymr.presentation.components.tasksList
+import com.example.tymr.sessions
+import com.example.tymr.tasks
+import com.example.tymr.subjects
 
 @Composable
 fun DashboardScreen() {
-    val subjects = listOf(
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[2], subjectId = 0),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0),
-        Subject(name = "ijdfsd", goalHours = "10", colors = Subject.subjectCardColors[0], subjectId = 0)
+
+    var isAddedSubjectDialog by rememberSaveable { mutableStateOf(false) }
+    var isDeleteSessionDialogOpen by rememberSaveable { mutableStateOf(false) }
+
+    var subjectName by remember { mutableStateOf("") }
+    var goalHours by remember { mutableStateOf("") }
+    var selectedColor by remember { mutableStateOf(Subject.subjectCardColors.random()) }
+
+    AddSubjectDialog(
+        isOpen = isAddedSubjectDialog,
+        subjectName = subjectName,
+        goalHours = goalHours,
+        onSubjectNameChange = {subjectName = it},
+        onGoalHoursChange = {goalHours = it},
+        selectedColors = selectedColor,
+        onColorChange = { selectedColor = it },
+        onDismissRequest = { isAddedSubjectDialog = false},
+        onConfirmButtonClick = { isAddedSubjectDialog = false }
     )
 
-    val tasks = listOf(
-        Task(
-            title = "Prepare",
-            description = "",
-            dueDate = 2L,
-            priority = 0,
-            relatedToSubject = "",
-            isComplete = false,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Prepare",
-            description = "",
-            dueDate = 2L,
-            priority = 1,
-            relatedToSubject = "",
-            isComplete = true,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Prepare",
-            description = "",
-            dueDate = 2L,
-            priority = 2,
-            relatedToSubject = "",
-            isComplete = true,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Prepare",
-            description = "",
-            dueDate = 2L,
-            priority = 0,
-            relatedToSubject = "",
-            isComplete = false,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Prepare",
-            description = "",
-            dueDate = 2L,
-            priority = 1,
-            relatedToSubject = "",
-            isComplete = false,
-            taskSubjectId = 0,
-            taskId = 1
-        )
-    )
-
-    val sessions = listOf(
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2L,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2L,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2L,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2L,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2L,
-            sessionSubjectId = 0,
-            sessionId = 0
-        )
-
+    DeleteDialog(
+        isOpen = isDeleteSessionDialogOpen,
+        title = "Delete Session?",
+        bodyText = "Are you sure you want to delete this session?",
+        onDismissRequest = { isDeleteSessionDialogOpen = false },
+        onConfirmButtonClick = { isDeleteSessionDialogOpen = false }
     )
     Scaffold (
         topBar = { DashboardScreenTopBar() }
@@ -166,7 +102,8 @@ fun DashboardScreen() {
             item {
                 SubjectsCardSection(
                     modifier = Modifier.fillMaxWidth(),
-                    subjectList = subjects
+                    subjectList = subjects,
+                    onAddIconClicked = { isAddedSubjectDialog = true}
                 )
             }
             item {
@@ -196,7 +133,7 @@ fun DashboardScreen() {
                 emptyListText = "You don't have any recent study sessions.\n" +
                         "Start a study session to begin recording you progress,",
                 sessions = sessions,
-                onDeleteIconClick = {}
+                onDeleteIconClick = { isDeleteSessionDialogOpen = true}
             )
         }
 
@@ -248,7 +185,8 @@ private fun CountCardSection(
 private fun SubjectsCardSection(
     modifier: Modifier,
     subjectList:List<Subject>,
-    emptyListText: String = "You don't have any tasks.\n Click the + button to add new task."
+    emptyListText: String = "You don't have any tasks.\n Click the + button to add new task.",
+    onAddIconClicked: () -> Unit
     ) {
     Column (modifier = modifier) {
         Row (
@@ -261,7 +199,7 @@ private fun SubjectsCardSection(
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 12.dp)
             )
-            IconButton(onClick = {}) {
+            IconButton(onClick = onAddIconClicked) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add subject"
